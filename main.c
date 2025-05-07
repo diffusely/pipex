@@ -6,7 +6,7 @@
 /*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 12:41:11 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/07 20:21:01 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/07 20:38:21 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,18 @@ int main(int argc, char *argv[], char *envp[])
     pip->cmd1 = ft_split(argv[2], ' ');
 	pip->cmd2 = ft_split(argv[3], ' ');
 	pip->envp = envp;
-	pip->cmd_path1 = get_path(argv[2], envp);
-	pip->cmd_path2 = get_path(argv[3], envp);
+	pip->cmd_path1 = get_path(pip->cmd1[0], envp);
+	pip->cmd_path2 = get_path(pip->cmd2[0], envp);
 
+	int i = 0;
+	while (pip->cmd1[i] || pip->cmd2[i])
+	{
+		printf("(%d)cmd1, %s\n", i,pip->cmd1[i]);
+		printf("(%d)cmd2, %s\n", i, pip->cmd2[i]);
+		i++;
+	}
+	ft_printf("%s\n", pip->cmd_path1);
+	ft_printf("%s\n", pip->cmd_path2);
 	
 	init_files(pip, argc, argv);
 	pipex(pip, envp);

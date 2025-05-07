@@ -12,7 +12,7 @@ OBJ			= $(SRC:%.c=%.o)
 LIB_FLAGS	= -L$(LIBFT) -lft -L$(PRINTF) -lftprintf
 IFLAG		= -I$(INCLUDES) -I$(LIBFT) -I$(PRINTF)
 FFLAG		= -g3 -fsanitize=address
-CFLAG		= -Wall -Wextra -Werror 
+CFLAG		= -Wall -Wextra -Werror
  
 CC			= cc
 AR			= ar rcs
