@@ -3,38 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 22:43:13 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/01 13:41:41 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:49:44 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static char	*find_path(char *path, char *cmd)
+static char	*find_path(char **path, char *cmd)
 {
 	char	*res;
+	int		i;
 
-	res = ft_strdup(path);
-	res = ft_strjoin_free(res, "/");
-	res = ft_strjoin_free(res, cmd);
-	path = res;
-	while (path)
+	i = 0;
+	while (path[i])
 	{
-		path = ft_strchr(path, '/');
+		res = ft_strjoin(path[i], "/");
+		res = ft_strjoin_free(res, cmd);
 		if (!path)
 			return (NULL);
-		if (access(path, X_OK) == 0)
-			return (free(res), ft_strdup(path));
-		++path;
+		if (access(res, X_OK) == 0)
+			return (free(path), res);
+		++i;
 	}
 	return (NULL);
 }
 
 char	*get_path(char *cmd, char **envp)
 {
-	char	*path;
+	char	**path;
 	int		i;
 
 	i = -1;
@@ -43,7 +42,7 @@ char	*get_path(char *cmd, char **envp)
 	{
 		if (!ft_strncmp(envp[i], "PATH=", 5))
 		{
-			path = envp[i];
+			path = ft_split(envp[i] + 5, ':');
 			break ;
 		}
 	}

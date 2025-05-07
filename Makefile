@@ -5,14 +5,15 @@ LIBFT		= lib/libft/
 INCLUDES	= includes
 SRC_DIR		= src/
 
-SRC			= main.c $(SRC_DIR)get_path.c $(SRC_DIR)error.c $(SRC_DIR)init.c
+SRC			= main.c $(SRC_DIR)get_path.c $(SRC_DIR)error.c $(SRC_DIR)init.c $(SRC_DIR)pipex.c
 
 OBJ			= $(SRC:%.c=%.o)
 
 LIB_FLAGS	= -L$(LIBFT) -lft -L$(PRINTF) -lftprintf
 IFLAG		= -I$(INCLUDES) -I$(LIBFT) -I$(PRINTF)
-CFLAG		= -Wall -Wextra -Werror
-
+FFLAG		= -g3 -fsanitize=address
+CFLAG		= -Wall -Wextra -Werror 
+ 
 CC			= cc
 AR			= ar rcs
 RM			= rm -rf

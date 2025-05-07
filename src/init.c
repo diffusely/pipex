@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 00:38:49 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/01 13:58:25 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/07 20:20:07 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	init_files(t_pip *pip, char argc, char **argv)
 
 	if (pip->fin == -1)
 	{
-		free(pip->cmd_path);
+		free(pip->cmd_path1);
+		free(pip->cmd_path2);
 		free(pip);
 		error_handle("file error\n", 0);
 		exit(0);
@@ -28,7 +29,8 @@ void	init_files(t_pip *pip, char argc, char **argv)
 
 	if (pip->fout == -1)
 	{
-		free(pip->cmd_path);
+		free(pip->cmd_path1);
+		free(pip->cmd_path2);
 		free(pip);
 		error_handle("file error\n", 0);
 		exit(0);
