@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 00:38:49 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/08 23:40:44 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/09 03:23:34 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,26 @@ void	init_files(t_pip *pip, char argc, char **argv)
 	}
 }
 
-static void	init_path(t_pip *pip, char **argv)
+static void	init_path(t_pip *pip)
 {
-	int	i;
-	int	pos;
+	int		pos;
+	int		i;
 
-	i = 0;
-	ft_printf("qq\n");
-	pip->path = malloc(pip->size * sizeof(char *));
-	while (i < pip->size)
+	i = -1;
+	pip->path = calloc(pip->size, sizeof(char *));
+	while (++i < pip->size)
 	{
-		pip->path[i] = get_path(argv[i + 2], pip->envp);
+		pip->path[i] = get_path(pip, pip->cmd[i][0]);
 		if (!pip->path[i])
 		{
-			ft_printf("qq\n");
 			pos = i;
 			while (--i >= 0)
-			{
 				free(pip->path[i]);
-				pip->path[i] = NULL;
-			}
+			free(pip->path);
+			pip->path = NULL;
 			free_all(pip);
-			error_print(argv[pos + 2], "command not found\n", 0);
+			error_print(pip->cmd[pos + 2][0], "command not found\n", 0);
 		}
-		++i;
 	}
 }
 
@@ -60,7 +56,7 @@ static void	init_fd(t_pip *pip)
 {
 	int	i;
 
-	pip->fd = calloc(pip->size - 1, sizeof(int));
+	pip->fd = calloc(pip->size - 1, sizeof(int *));
 	if (!pip->fd)
 	{
 		free_all(pip);
@@ -70,11 +66,12 @@ static void	init_fd(t_pip *pip)
 	while (i < pip->size - 1)
 	{
 		pip->fd[i] = calloc(2, sizeof(int));
-		if (pip->fd[i])
+		if (!pip->fd[i])
 		{
 			while (--i >= 0)
 				free(pip->fd[i]);
 			free(pip->fd);
+			pip->fd = NULL;
 			free_all(pip);
 			error_handle("*FD* Bad alloc!\n", 1);
 		}
@@ -86,7 +83,7 @@ static void	init_cmd_and_pid(t_pip *pip, char **argv)
 {
 	int		i;
 
-	pip->pid = malloc((pip->size) * sizeof(pid_t));
+	pip->pid = calloc(pip->size, sizeof(pid_t));
 	if (!pip->pid)
 	{
 		free_all(pip);
@@ -116,7 +113,7 @@ void	init_pipex_val(t_pip *pip, char **argv, char **envp, int argc)
 	pip->pid = NULL;
 	pip->fd = NULL;
 	pip->envp = envp;
-	init_path(pip, argv);
 	init_cmd_and_pid(pip, argv);
+	init_path(pip);
 	init_fd(pip);
 }

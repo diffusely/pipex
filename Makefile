@@ -30,10 +30,7 @@ $(NAME):			$(OBJ)
 					make -C $(LIBFT)
 					$(CC) $(CFLAG) $(OBJ) $(LIB_FLAGS) -o $(NAME)
 
-bonus:				$(OBJ)
-					make -C $(PRINTF)
-					make -C $(LIBFT)
-					$(CC) $(CFLAG) $(OBJ) $(LIB_FLAGS) -o $(BNAME)
+bonus:				all
 
 clean:				
 					make -C $(PRINTF) clean

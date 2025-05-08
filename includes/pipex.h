@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 12:42:04 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/08 23:18:56 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/09 03:02:08 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_pip
 }	t_pip;
 
 // Path
-char	*get_path(char *cmd, char **envp);
+char	*get_path(t_pip *pip, char *cmd);
 
 // Errors
 void	error_print(const char *cmd, const char *msg, int flag);
@@ -51,8 +51,6 @@ void	init_files(t_pip *pip, char argc, char **argv);
 // Utils | Free
 void	free_all(t_pip *pip);
 void	free_split(char **str);
-void	free_path(t_pip *pip);
-void	free_fd(t_pip *pip);
 
 // Pipe
 void	pipex(t_pip *pip, char **envp);
