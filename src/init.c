@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 00:38:49 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/07 20:39:13 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/08 23:40:44 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,108 @@
 void	init_files(t_pip *pip, char argc, char **argv)
 {
 	pip->fin = open(argv[1], O_RDONLY);
-
 	if (pip->fin == -1)
 	{
-		free(pip->cmd_path1);
-		free(pip->cmd_path2);
 		free(pip);
-		error_handle("file error\n", 0);
-		exit(0);
+		error_print(argv[1], "", 1);
 	}
-
 	pip->fout = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-
 	if (pip->fout == -1)
 	{
-		free(pip->cmd_path1);
-		free(pip->cmd_path2);
+		close(pip->fin);
 		free(pip);
-		error_handle("file error\n", 0);
-		exit(0);
+		error_print(argv[1], "", 1);
 	}
+}
+
+static void	init_path(t_pip *pip, char **argv)
+{
+	int	i;
+	int	pos;
+
+	i = 0;
+	ft_printf("qq\n");
+	pip->path = malloc(pip->size * sizeof(char *));
+	while (i < pip->size)
+	{
+		pip->path[i] = get_path(argv[i + 2], pip->envp);
+		if (!pip->path[i])
+		{
+			ft_printf("qq\n");
+			pos = i;
+			while (--i >= 0)
+			{
+				free(pip->path[i]);
+				pip->path[i] = NULL;
+			}
+			free_all(pip);
+			error_print(argv[pos + 2], "command not found\n", 0);
+		}
+		++i;
+	}
+}
+
+static void	init_fd(t_pip *pip)
+{
+	int	i;
+
+	pip->fd = calloc(pip->size - 1, sizeof(int));
+	if (!pip->fd)
+	{
+		free_all(pip);
+		error_handle("*FD* Bad alloc!\n", 1);
+	}
+	i = 0;
+	while (i < pip->size - 1)
+	{
+		pip->fd[i] = calloc(2, sizeof(int));
+		if (pip->fd[i])
+		{
+			while (--i >= 0)
+				free(pip->fd[i]);
+			free(pip->fd);
+			free_all(pip);
+			error_handle("*FD* Bad alloc!\n", 1);
+		}
+		i++;
+	}
+}
+
+static void	init_cmd_and_pid(t_pip *pip, char **argv)
+{
+	int		i;
+
+	pip->pid = malloc((pip->size) * sizeof(pid_t));
+	if (!pip->pid)
+	{
+		free_all(pip);
+		error_handle("*PID* Bad alloc!\n", 1);
+	}
+	i = 0;
+	pip->cmd = malloc(pip->size * sizeof(char **));
+	if (!pip->cmd)
+	{
+		free_all(pip);
+		error_handle("*CMD* Bad alloc!\n", 1);
+	}
+	while (i < pip->size)
+	{
+		pip->cmd[i] = ft_split(argv[i + 2], ' ');
+		if (!pip->cmd[i])
+			error_handle("*CMD* Bad alloc\n", 1);
+		i++;
+	}
+}
+
+void	init_pipex_val(t_pip *pip, char **argv, char **envp, int argc)
+{
+	pip->size = argc - 3;
+	pip->cmd = NULL;
+	pip->path = NULL;
+	pip->pid = NULL;
+	pip->fd = NULL;
+	pip->envp = envp;
+	init_path(pip, argv);
+	init_cmd_and_pid(pip, argv);
+	init_fd(pip);
 }

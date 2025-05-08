@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 20:25:56 by noavetis          #+#    #+#             */
-/*   Updated: 2025/04/19 20:58:18 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:56:37 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	word_count(const char *str, char c)
 	size_t	count;
 
 	count = 0;
-	while (*str)
+	while (str && *str)
 	{
 		while (*str && *str == c)
 			str++;
@@ -33,6 +33,8 @@ static size_t	word_size(const char **ptr, char c)
 {
 	size_t	i;
 
+	if (!ptr)
+		return (0);
 	while (**ptr && **ptr == c)
 		(*ptr)++;
 	i = 0;
@@ -59,6 +61,8 @@ char	**ft_split(char const *s, char c)
 	int			i;
 
 	i = 0;
+	if (!s)
+		return (NULL);
 	size = word_count(s, c);
 	result = (char **)malloc((size + 1) * sizeof(char *));
 	if (!result)

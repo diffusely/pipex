@@ -3,61 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:19:29 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/07 20:22:04 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/08 23:35:02 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-	   
+
+// static void	close_fd(t_pip *pipe, int index)
+// {
+// 	int	i;
+// 	int	j;
+
+// 	i = 0;
+// 	while (i < pipe->size - 1)
+// 	{
+// 		j = 0;
+// 		while (j < 2)
+// 		{
+// 			if (!(i == index && j == 0)
+// 				|| !(i + 1 == index && j == 1))
+// 				close(pipe->fd[i][j]);
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
+
 void	pipex(t_pip *pip, char **envp)
 {
-	if (pipe(pip->fd) == -1)
-		error_handle("pipe error\n", 0);
-	
-	pip->pid1 = fork();
-	if (pip->pid1 == -1)
-		error_handle("fork error\n", 0);
-	
-	//ft_printf("test\n");
-	if (pip->pid1 == 0)
-	{
-		dup2(pip->fin, STDIN_FILENO);
-        dup2(pip->fd[1], STDOUT_FILENO);
-		
-		close(pip->fd[0]);
-		close(pip->fd[1]);
-		close(pip->fin);
+	int	i;
 
-        execve(pip->cmd_path1, pip->cmd1, envp);
-        error_handle("execve cmd1 error\n", 1);
+	i = 0;
+	while (i < pip->size - 1)
+	{
+		if (pipe(pip->fd[i]) == -1)
+		{	
+			free_all(pip);
+			error_handle("pipe error\n", 0);
+		}
+		++i;
 	}
-
-	pip->pid2 = fork();
-	if (pip->pid2 == -1)
-		error_handle("fork error\n", 0);
-
-	if (pip->pid2 == 0)
+	i = 0;
+	while (i < pip->size)
 	{
-        dup2(pip->fd[0], STDIN_FILENO);
-		dup2(pip->fout, STDOUT_FILENO);
-		
-        close(pip->fd[0]);
-		close(pip->fd[1]);
-		close(pip->fout);
-
-        execve(pip->cmd_path2, pip->cmd2, envp);
-        error_handle("execve cmd2 error\n", 1);	
+		pip->pid[i] = fork();
+		if (pip->pid[i] == -1)
+			error_handle("fork error\n", 0);
+		if (pip->pid[i] == 0)
+		{
+			if (i == 0)
+				dup2(pip->fin, STDIN_FILENO);
+			else
+				dup2(pip->fd[i - 1][0], STDIN_FILENO);
+			if (i == pip->size - 1)
+				dup2(pip->fout, STDOUT_FILENO);
+			else
+				dup2(pip->fd[i][1], STDOUT_FILENO);
+			execve(pip->path[i], pip->cmd[i], envp);
+		}
 	}
 	
-
-	close(pip->fd[0]);
-	close(pip->fd[1]);
 	close(pip->fin);
 	close(pip->fout);
 
-	waitpid(pip->pid1, NULL, 0);
-	waitpid(pip->pid2, NULL, 0);
+	i = 0;
+	while (i < pip->size)
+		waitpid(pip->pid[i], NULL, 0);
 }

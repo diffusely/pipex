@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 22:27:00 by noavetis          #+#    #+#             */
-/*   Updated: 2025/04/30 22:37:05 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:20:15 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strjoin_free(char *s1, char const *s2)
 	size = ft_strlen(s1) + ft_strlen(s2);
 	str = malloc((size + 1) * sizeof(char));
 	if (!str)
-		return (NULL);
+		return (free(s1), NULL);
 	i = -1;
 	while (s1[++i])
 		str[i] = s1[i];

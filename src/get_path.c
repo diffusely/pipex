@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 22:43:13 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/07 17:49:44 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:23:04 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,14 @@ static char	*find_path(char **path, char *cmd)
 	{
 		res = ft_strjoin(path[i], "/");
 		res = ft_strjoin_free(res, cmd);
-		if (!path)
-			return (NULL);
+		if (!res)
+			return (free_split(path), NULL);
 		if (access(res, X_OK) == 0)
-			return (free(path), res);
+			return (free_split(path), res);
+		free(res);
 		++i;
 	}
-	return (NULL);
+	return (free_split(path), NULL);
 }
 
 char	*get_path(char *cmd, char **envp)

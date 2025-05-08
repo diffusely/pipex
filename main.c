@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 12:41:11 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/07 20:38:21 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/08 23:32:13 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,36 +22,23 @@ int main(int argc, char *argv[], char *envp[])
     // }
 
 	t_pip *pip;
-	pip = malloc(sizeof(t_pip));
-	
-	//ft_printf("wqer\n");
-    pip->cmd1 = ft_split(argv[2], ' ');
-	pip->cmd2 = ft_split(argv[3], ' ');
-	pip->envp = envp;
-	pip->cmd_path1 = get_path(pip->cmd1[0], envp);
-	pip->cmd_path2 = get_path(pip->cmd2[0], envp);
+	pip = ft_calloc(1, sizeof(t_pip));
+    if (!pip)
+        error_handle("Bad alloc!\n", 1);
 
-	int i = 0;
-	while (pip->cmd1[i] || pip->cmd2[i])
-	{
-		printf("(%d)cmd1, %s\n", i,pip->cmd1[i]);
-		printf("(%d)cmd2, %s\n", i, pip->cmd2[i]);
-		i++;
-	}
-	ft_printf("%s\n", pip->cmd_path1);
-	ft_printf("%s\n", pip->cmd_path2);
-	
-	init_files(pip, argc, argv);
-	pipex(pip, envp);
-    if (!pip->cmd_path1)
-	{
-		error_print(pip->cmd1[0], "command not found\n", 0);
-	}
-	
+        //******************************** */
+ 
+    //******************************** */
+
+    
+    init_files(pip, argc, argv);
+    init_pipex_val(pip, argv, envp, argc);
+    pipex(pip, envp);
 	//char *args[] = {argv[1], argv[2], NULL};
 	//ft_printf("%s\n", pip->cmd1);
     //execve(pip->cmd_path1, args, envp);
 
+    free_all(pip);
     return 0;
 }
 
