@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 20:45:09 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/09 03:25:45 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/09 23:41:28 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,15 @@ static void	free_path(t_pip *pip)
 	if (!pip->path)
 		return ;
 	i = 0;
-	while(i < pip->size && pip->path[i])
-		free(pip->path[i++]);
+	while (i < pip->size)
+	{
+		if (pip->path[i])
+			free(pip->path[i]);
+		++i;
+	}
 	free(pip->path);
 	pip->path = NULL;
 }
-
 
 static void	free_fd(t_pip *pip)
 {
@@ -56,10 +59,8 @@ void	free_all(t_pip *pip)
 {
 	close(pip->fin);
 	close(pip->fout);
-
 	if (pip->pid)
 		free(pip->pid);
-		
 	free_cmd(pip);
 	free_fd(pip);
 	free_path(pip);

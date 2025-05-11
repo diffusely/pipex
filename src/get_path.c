@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 22:43:13 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/09 03:24:00 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/09 23:43:50 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,17 @@ static char	*find_path(t_pip *pip, char **path, char *cmd)
 		res = ft_strjoin(path[i], "/");
 		res = ft_strjoin_free(res, cmd);
 		if (!res)
-			break ;
+		{
+			free_split(path);
+			free_all(pip);
+			error_handle("*JOIN* Bad alloc", 1);
+		}
 		if (access(res, X_OK) == 0)
 			return (free_split(path), res);
 		free(res);
 		++i;
 	}
-	free_split(path);
-	free_all(pip);
-	error_handle("", 0);
-	return (free_split(path), NULL);
+	return (free_split(path), ft_strdup("Error"));
 }
 
 char	*get_path(t_pip *pip, char *cmd)
@@ -42,6 +43,8 @@ char	*get_path(t_pip *pip, char *cmd)
 
 	i = -1;
 	path = NULL;
+	if (!cmd)
+		return (NULL);
 	while (pip->envp[++i])
 	{
 		if (!ft_strncmp(pip->envp[i], "PATH=", 5))

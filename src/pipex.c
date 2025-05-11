@@ -6,29 +6,36 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:19:29 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/09 02:12:51 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/10 00:46:06 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	close_fd(t_pip *pip, int index)
+static void	close_all_fd(t_pip *pip)
 {
 	int	i;
 
 	i = 0;
+	while (i < pip->size - 1)
+	{
+		close(pip->fd[i][0]);
+		close(pip->fd[i][1]);
+		i++;
+	}
+}
+
+static void	close_fd(t_pip *pip, int index)
+{
 	if (index == 0)
 		close(pip->fin);
 	else if (index == pip->size - 1)
 		close(pip->fout);
-	while (i < pip->size - 1)
-	{
-		if (i != index)
-			close(pip->fd[i][0]);
-		if (i != index + 1)
-			close(pip->fd[i][1]);
-		++i;
-	}
+	close_all_fd(pip);
+	execve(pip->path[index], pip->cmd[index], pip->envp);
+	ft_putstr_fd(pip->cmd[index][0], 2);
+	free_all(pip);
+	error_handle(": command not found\n", 1);
 }
 
 static void	call_pipe(t_pip *pip)
@@ -39,10 +46,7 @@ static void	call_pipe(t_pip *pip)
 	while (i < pip->size - 1)
 	{
 		if (pipe(pip->fd[i]) == -1)
-		{
-			free_all(pip);
 			error_handle("pipe error\n", 0);
-		}
 		++i;
 	}
 }
@@ -53,22 +57,13 @@ static void	close_and_wait(t_pip *pip)
 
 	close(pip->fin);
 	close(pip->fout);
-	i = 0;
-	while (i < pip->size - 1)
-	{
-		close(pip->fd[i][0]);
-		close(pip->fd[i][1]);
-		++i;
-	}
+	close_all_fd(pip);
 	i = 0;
 	while (i < pip->size)
-	{
-		waitpid(pip->pid[i], NULL, 0);
-		++i;
-	}
+		waitpid(pip->pid[i++], NULL, 0);
 }
 
-void	pipex(t_pip *pip, char **envp)
+void	pipex(t_pip *pip)
 {
 	int	i;
 
@@ -89,9 +84,7 @@ void	pipex(t_pip *pip, char **envp)
 				dup2(pip->fout, STDOUT_FILENO);
 			else
 				dup2(pip->fd[i][1], STDOUT_FILENO);
-
 			close_fd(pip, i);
-			execve(pip->path[i], pip->cmd[i], envp);
 		}
 	}
 	close_and_wait(pip);

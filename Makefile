@@ -6,7 +6,7 @@ INCLUDES	= includes
 SRC_DIR		= src/
 
 SRC			= main.c $(SRC_DIR)get_path.c $(SRC_DIR)error.c $(SRC_DIR)init.c $(SRC_DIR)pipex.c \
-			  $(SRC_DIR)utils.c
+			  $(SRC_DIR)utils.c $(SRC_DIR)here_doc_bonus.c
 
 OBJ			= $(SRC:%.c=%.o)
 

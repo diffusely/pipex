@@ -6,7 +6,7 @@
 /*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 12:42:04 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/09 03:02:08 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/10 01:14:16 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,40 +20,27 @@
 # include "fcntl.h"
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <string.h>
 
 typedef struct s_pip
 {
 	int		fout;
 	int		fin;
-	
 	char	**path;
 	char	***cmd;
-	
 	int		**fd;
 	pid_t	*pid;
-	
 	int		size;
-
 	char	**envp;
-
 }	t_pip;
 
-// Path
 char	*get_path(t_pip *pip, char *cmd);
-
-// Errors
 void	error_print(const char *cmd, const char *msg, int flag);
 void	error_handle(char *msg, int flag);
-
-// Init
-void	init_files(t_pip *pip, char argc, char **argv);
-
-// Utils | Free
 void	free_all(t_pip *pip);
 void	free_split(char **str);
-
-// Pipe
-void	pipex(t_pip *pip, char **envp);
+void	pipex(t_pip *pip);
 void	init_pipex_val(t_pip *pip, char **argv, char **envp, int argc);
+void	here_doc(t_pip *pip, char **argv);
 
 #endif
