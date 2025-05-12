@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 22:15:10 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/10 01:51:07 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:46:27 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_pip	*pip;
 
+	ft_printf("qq\n");
 	if (argc < 5)
 	{
 		error_handle("Usage: ./pipex file cmd cmd ... file\n", 1);
@@ -30,7 +31,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (argc < 6)
 			error_handle("Usage: ./pipex here_doc LIMITER cmd ... file\n", 1);
-		here_doc(pip, argv);
+		init_here_doc_val(pip, argv, envp, argc);
+		here_doc(pip);
 		free(pip);
 		return (0);
 	}

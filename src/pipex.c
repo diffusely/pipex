@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:19:29 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/10 00:46:06 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/12 20:50:00 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,12 @@ static void	close_all_fd(t_pip *pip)
 
 static void	close_fd(t_pip *pip, int index)
 {
-	if (index == 0)
-		close(pip->fin);
-	else if (index == pip->size - 1)
+	//if (index == 0)
+		//close(pip->fin);
+	if (index == pip->size - 1)
 		close(pip->fout);
 	close_all_fd(pip);
 	execve(pip->path[index], pip->cmd[index], pip->envp);
-	ft_putstr_fd(pip->cmd[index][0], 2);
-	free_all(pip);
-	error_handle(": command not found\n", 1);
 }
 
 static void	call_pipe(t_pip *pip)
@@ -56,7 +53,7 @@ static void	close_and_wait(t_pip *pip)
 	int	i;
 
 	close(pip->fin);
-	close(pip->fout);
+	//close(pip->fout);
 	close_all_fd(pip);
 	i = 0;
 	while (i < pip->size)

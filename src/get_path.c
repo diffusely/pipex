@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 22:43:13 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/09 23:43:50 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/12 21:18:22 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static char	*find_path(t_pip *pip, char **path, char *cmd)
 		free(res);
 		++i;
 	}
+	ft_printf("Errorrr\n");
 	return (free_split(path), ft_strdup("Error"));
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 00:38:49 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/10 00:17:58 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/12 21:20:25 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ static void	init_files(t_pip *pip, char argc, char **argv)
 	{
 		close(pip->fin);
 		free(pip);
-		error_print(argv[1], "", 1);
+		error_print(argv[argc - 1], "", 1);
 	}
 }
 
-static void	init_path(t_pip *pip)
+void	init_path(t_pip *pip)
 {
 	int		i;
 
@@ -39,7 +39,7 @@ static void	init_path(t_pip *pip)
 		pip->path[i] = get_path(pip, pip->cmd[i][0]);
 }
 
-static void	init_fd(t_pip *pip)
+void	init_fd(t_pip *pip)
 {
 	int	i;
 
@@ -66,7 +66,7 @@ static void	init_fd(t_pip *pip)
 	}
 }
 
-static void	init_cmd_and_pid(t_pip *pip, char **argv)
+void	init_cmd_and_pid(t_pip *pip, char **argv, int add)
 {
 	int		i;
 
@@ -85,7 +85,7 @@ static void	init_cmd_and_pid(t_pip *pip, char **argv)
 	}
 	while (i < pip->size)
 	{
-		pip->cmd[i] = ft_split(argv[i + 2], ' ');
+		pip->cmd[i] = ft_split(argv[i + add], ' ');
 		if (!pip->cmd[i])
 			error_handle("*CMD* Bad alloc\n", 1);
 		i++;
@@ -101,7 +101,8 @@ void	init_pipex_val(t_pip *pip, char **argv, char **envp, int argc)
 	pip->fd = NULL;
 	pip->envp = envp;
 	init_files(pip, argc, argv);
-	init_cmd_and_pid(pip, argv);
+	init_cmd_and_pid(pip, argv, 2);
 	init_path(pip);
 	init_fd(pip);
+	perror("qq");
 }

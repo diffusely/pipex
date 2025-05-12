@@ -1,25 +1,17 @@
-0
-5
-2
-a
-b
-includes
-lib
-main.c
-main.o
-Makefile
-pipex
-qweqb
-README.md
-src
-a
-b
-includes
-lib
-main.c
-main.o
-Makefile
-pipex
-qweqb
-README.md
-src
+drwxr-xr-x 2 noavetis 2024_yerevan   208 May 12 21:20 src
+drwxr-xr-x 2 noavetis 2024_yerevan    78 May 12 18:07 includes
+drwxr-xr-x 4 noavetis 2024_yerevan    36 May  7 16:29 lib
+drwxr-xr-x 6 noavetis 2024_yerevan   192 May 12 21:20 .
+drwxr-xr-x 6 noavetis 2024_yerevan    74 Apr 29 17:50 ..
+drwxr-xr-x 8 noavetis 2024_yerevan   220 May 12 18:07 .git
+-rw-r--r-- 1 noavetis 2024_yerevan     0 May 12 18:07 qweqb
+-rw-r--r-- 1 noavetis 2024_yerevan    12 May 12 21:05 b
+-rw-r--r-- 1 noavetis 2024_yerevan  1489 May 12 20:46 main.c
+-rw-r--r-- 1 noavetis 2024_yerevan  2224 May 12 20:46 main.o
+-rw-r--r-- 1 noavetis 2024_yerevan    25 May 12 18:07 .gitignore
+-rw-r--r-- 1 noavetis 2024_yerevan     7 Apr 29 13:21 README.md
+-rw-r--r-- 1 noavetis 2024_yerevan   923 May 12 18:07 Makefile
+-rwxrwxrwx 1 noavetis 2024_yerevan     0 May 12 21:21 a
+-rwxrwxrwx 1 noavetis 2024_yerevan   110 May 12 20:11 qabab
+-rwxr-xr-x 1 noavetis 2024_yerevan 26912 May 12 21:20 pipex
+total 56
