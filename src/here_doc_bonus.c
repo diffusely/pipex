@@ -3,25 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 00:15:03 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/12 21:19:45 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:47:34 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-static void	open_here_doc_file(t_pip *pip, char **argv, int argc)
+static void	write_here_doc(t_pip *pip, char **argv)
 {
 	char	*gnl;
 
-	pip->fin = open(argv[argc - 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-	if (pip->fin == -1)
-	{
-		free(pip);
-		error_print(argv[1], "", 1);
-	}
 	while (1)
 	{
 		ft_printf(">");
@@ -30,19 +24,40 @@ static void	open_here_doc_file(t_pip *pip, char **argv, int argc)
 			break ;
 		gnl[ft_strlen(gnl) - 1] = '\0';
 		if (!ft_strcmp(gnl, argv[2]))
-		{
-			free(gnl);
 			break ;
-		}
-		write(pip->fin, gnl, ft_strlen(gnl));
-		write(pip->fin, "\n", 1);
+		if (write(pip->fd[0][1], gnl, ft_strlen(gnl)) == -1)
+			exit(1);
+		if (write(pip->fd[0][1], "\n", 1) == -1)
+			exit(1);
 		free(gnl);
 	}
+	free(gnl);
 	get_next_line(-1);
 }
 
-void	here_doc(t_pip *pip)
+void	here_doc(t_pip *pip, char **argv, int argc)
 {
+	pip->fout = open(argv[argc - 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (pip->fout == -1)
+	{
+		free_all(pip);
+		error_print(argv[argc - 1], "", 1);
+	}
+	if (pipe(pip->fd[0]) == -1)
+		error_handle("pipe error\n", 1);
+	pip->pid[0] = fork();
+	if (pip->pid[0] == -1)
+		error_handle("fork error\n", 1);
+	if (pip->pid[0] == 0)
+	{
+		close(pip->fd[0][0]);
+		write_here_doc(pip, argv);
+		close(pip->fd[0][1]);
+		exit(0);
+	}
+	close(pip->fd[0][1]);
+	waitpid(pip->pid[0], NULL, 0);
+	pip->fin = pip->fd[0][0];
 	pipex(pip);
 }
 
@@ -54,15 +69,7 @@ void	init_here_doc_val(t_pip *pip, char **argv, char **envp, int argc)
 	pip->pid = NULL;
 	pip->fd = NULL;
 	pip->envp = envp;
-	open_here_doc_file(pip, argv, argc);
-	pip->fout = pip->fin;
 	init_cmd_and_pid(pip, argv, 3);
 	init_path(pip);
-	int i = 0;
-	while (i < pip->size)
-	{
-		ft_printf("%s\n", pip->cmd[i++][0]);
-	}
-	perror("qq");
 	init_fd(pip);
 }

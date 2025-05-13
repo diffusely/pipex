@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
+/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 00:38:49 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/12 21:20:25 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/13 14:02:51 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,5 +104,4 @@ void	init_pipex_val(t_pip *pip, char **argv, char **envp, int argc)
 	init_cmd_and_pid(pip, argv, 2);
 	init_path(pip);
 	init_fd(pip);
-	perror("qq");
 }
