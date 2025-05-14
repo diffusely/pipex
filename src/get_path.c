@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 22:43:13 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/13 14:48:20 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:40:07 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,15 @@ static char	*find_path(t_pip *pip, char **path, char *cmd)
 	char	*res;
 	int		i;
 
-	i = 0;
-	while (path[i])
+	i = -1;
+	while (path[++i])
 	{
+		res = ft_strdup(cmd);
+		if (access(res, X_OK) == 0)
+			return (free_split(path), res);
+		if (res[0] == '/' || res[0] == '.')
+			return (free(res), free_split(path), ft_strdup("Error"));
+		free(res);
 		res = ft_strjoin(path[i], "/");
 		res = ft_strjoin_free(res, cmd);
 		if (!res)
@@ -31,7 +37,6 @@ static char	*find_path(t_pip *pip, char **path, char *cmd)
 		if (access(res, X_OK) == 0)
 			return (free_split(path), res);
 		free(res);
-		++i;
 	}
 	return (free_split(path), ft_strdup("Error"));
 }

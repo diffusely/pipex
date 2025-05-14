@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 00:38:49 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/13 14:02:51 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:40:39 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ void	init_path(t_pip *pip)
 	i = -1;
 	pip->path = calloc(pip->size, sizeof(char *));
 	while (++i < pip->size)
+	{
 		pip->path[i] = get_path(pip, pip->cmd[i][0]);
+	}
 }
 
 void	init_fd(t_pip *pip)

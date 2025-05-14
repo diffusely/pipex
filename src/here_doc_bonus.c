@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 00:15:03 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/13 14:47:34 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:48:05 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,15 @@ static void	write_here_doc(t_pip *pip, char **argv)
 		if (!ft_strcmp(gnl, argv[2]))
 			break ;
 		if (write(pip->fd[0][1], gnl, ft_strlen(gnl)) == -1)
+		{
+			free_all(pip);
 			exit(1);
+		}
 		if (write(pip->fd[0][1], "\n", 1) == -1)
+		{
+			free_all(pip);
 			exit(1);
+		}
 		free(gnl);
 	}
 	free(gnl);
@@ -53,6 +59,7 @@ void	here_doc(t_pip *pip, char **argv, int argc)
 		close(pip->fd[0][0]);
 		write_here_doc(pip, argv);
 		close(pip->fd[0][1]);
+		free_all(pip);
 		exit(0);
 	}
 	close(pip->fd[0][1]);

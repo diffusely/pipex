@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: noavetis <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: noavetis <noavetis@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 12:42:04 by noavetis          #+#    #+#             */
-/*   Updated: 2025/05/13 13:48:39 by noavetis         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:18:29 by noavetis         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@
 typedef struct s_pip
 {
 	int		fout;
-	int		fd1[2];
 	int		fin;
 	char	**path;
 	char	***cmd;
