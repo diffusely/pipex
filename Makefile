@@ -8,15 +8,17 @@ SRC_DIR		= src/
 SRC			= main.c $(SRC_DIR)get_path.c $(SRC_DIR)error.c $(SRC_DIR)init.c $(SRC_DIR)pipex.c \
 			  $(SRC_DIR)utils.c $(SRC_DIR)here_doc_bonus.c
 
+BSC			= main_bonus.c $(SRC_DIR)get_path.c $(SRC_DIR)error.c $(SRC_DIR)init.c $(SRC_DIR)pipex.c \
+			  $(SRC_DIR)utils.c $(SRC_DIR)here_doc_bonus.c
+
 OBJ			= $(SRC:%.c=%.o)
+BOBJ		= $(BSC:%.c=%.o)
 
 LIB_FLAGS	= -L$(LIBFT) -lft -L$(PRINTF) -lftprintf
 IFLAG		= -I$(INCLUDES) -I$(LIBFT) -I$(PRINTF)
-FFLAG		= -g3 -fsanitize=address
 CFLAG		= -Wall -Wextra -Werror
  
 CC			= cc
-AR			= ar rcs
 RM			= rm -rf
 
 
@@ -30,12 +32,15 @@ $(NAME):			$(OBJ)
 					make -C $(LIBFT)
 					$(CC) $(CFLAG) $(OBJ) $(LIB_FLAGS) -o $(NAME)
 
-bonus:				all
+bonus:				$(BOBJ)
+					make -C $(PRINTF)
+					make -C $(LIBFT)
+					$(CC) $(CFLAG) $(BOBJ) $(LIB_FLAGS) -o $(NAME)
 
 clean:				
 					make -C $(PRINTF) clean
 					make -C $(LIBFT) clean
-					$(RM) $(OBJ)
+					$(RM) $(OBJ) $(BOBJ)
 
 fclean: 			clean
 					make -C $(PRINTF) fclean
